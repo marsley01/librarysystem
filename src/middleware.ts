@@ -41,12 +41,16 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fetch user role for protected routing
-  const { data: profile } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single();
+  // Fetch user role for protected routing only if user exists
+  let profile = null;
+  if (user) {
+    const { data } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+    profile = data;
+  }
 
   const isSystemAdmin = profile?.role === 'system_admin';
   const hasProfile = !!profile;
