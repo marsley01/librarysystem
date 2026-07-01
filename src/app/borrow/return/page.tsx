@@ -23,7 +23,7 @@ export default function ReturnBookPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

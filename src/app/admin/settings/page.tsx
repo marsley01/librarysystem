@@ -17,7 +17,7 @@ export default function SettingsPage() {
   const [defaultLoanDays, setDefaultLoanDays] = useState('14');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

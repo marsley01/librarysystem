@@ -42,7 +42,7 @@ export default function NewBookPage() {
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

@@ -14,7 +14,7 @@ export default function ReportsPage() {
   const [monthlyBorrows, setMonthlyBorrows] = useState<number>(0);
   const [overdueList, setOverdueList] = useState<(BorrowRecord & { book?: Book })[]>([]);
   const [mostBorrowed, setMostBorrowed] = useState<{ title: string; count: number }[]>([]);
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

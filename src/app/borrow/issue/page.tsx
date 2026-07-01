@@ -28,7 +28,7 @@ export default function IssueBookPage() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

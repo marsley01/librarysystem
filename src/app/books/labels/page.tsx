@@ -13,7 +13,7 @@ export default function LabelsPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

@@ -23,7 +23,7 @@ import type { Book } from '@/types/database';
 export default function EditBookPage() {
   const params = useParams();
   const router = useRouter();
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
   const [book, setBook] = useState<Book | null>(null);
   const [form, setForm] = useState<any>({});
   const [error, setError] = useState<string | null>(null);

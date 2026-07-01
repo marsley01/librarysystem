@@ -36,7 +36,7 @@ export default function BooksPage() {
   const [departmentFilter, setDepartmentFilter] = useState('all');
   const [availabilityFilter, setAvailabilityFilter] = useState('all');
   const [showArchived, setShowArchived] = useState(false);
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

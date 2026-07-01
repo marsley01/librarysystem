@@ -37,7 +37,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [recentActivity, setRecentActivity] = useState<(BorrowRecord & { book?: { title: string } })[]>([]);
   const [user, setUser] = useState<User | null>(null);
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
 
   useEffect(() => {
     async function load() {

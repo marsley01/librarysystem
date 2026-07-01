@@ -26,7 +26,7 @@ export default function LibrariansPage() {
   const [invitePassword, setInvitePassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [inviting, setInviting] = useState(false);
-  const supabase = createClient();
+  const [supabase] = useState(createClient);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
