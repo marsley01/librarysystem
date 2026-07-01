@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
@@ -114,6 +115,13 @@ export default function LoginPage() {
             {loading ? 'Signing in...' : 'Sign In'}
           </Button>
         </form>
+
+        <p className="mt-4 text-center text-sm text-muted-fg">
+          Don&apos;t have an account?{' '}
+          <Link href="/register" className="font-medium text-accent hover:underline">
+            Register
+          </Link>
+        </p>
 
         <p className="mt-6 text-center text-xs text-dimmed">
           KenyaLibrarySystems &copy; {new Date().getFullYear()}

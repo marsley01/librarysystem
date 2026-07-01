@@ -12,6 +12,9 @@ import {
   BarChart3,
   LogOut,
   Library,
+  ClipboardList,
+  MessageSquare,
+  ShieldCheck,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { APP_SHORT_NAME } from '@/lib/constants';
@@ -33,6 +36,9 @@ const navItems = (role: string) => {
 
   if (role === 'admin') {
     items.push(
+      { label: 'Admin', href: '/admin', icon: ShieldCheck },
+      { label: 'Changelog', href: '/admin/changelog', icon: ClipboardList },
+      { label: 'Quote Requests', href: '/admin/demo-requests', icon: MessageSquare },
       { label: 'Librarians', href: '/admin/librarians', icon: Users },
       { label: 'Settings', href: '/admin/settings', icon: Settings },
       { label: 'Reports', href: '/admin/reports', icon: BarChart3 }

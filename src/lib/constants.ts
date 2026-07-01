@@ -63,6 +63,8 @@ export const BOOK_CONDITIONS = [
   { value: 'damaged', label: 'Damaged' },
 ] as const;
 
+import type { ChangelogType, ChangelogStatus, ChangelogSeverity } from '@/types/database';
+
 export const BORROW_STATUS_COLORS: Record<string, string> = {
   borrowed: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
   returned: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
@@ -84,4 +86,26 @@ export const ADMIN_NAV_ITEMS = [
   { label: 'Librarians', href: '/admin/librarians', icon: 'Users' },
   { label: 'Settings', href: '/admin/settings', icon: 'Settings' },
   { label: 'Reports', href: '/admin/reports', icon: 'BarChart3' },
+];
+
+export const CHANGELOG_TYPES: { value: ChangelogType; label: string }[] = [
+  { value: 'feature', label: 'Feature' },
+  { value: 'fix', label: 'Fix' },
+  { value: 'improvement', label: 'Improvement' },
+  { value: 'issue', label: 'Issue' },
+  { value: 'announcement', label: 'Announcement' },
+];
+
+export const CHANGELOG_STATUSES: { value: ChangelogStatus; label: string }[] = [
+  { value: 'open', label: 'Open' },
+  { value: 'in_progress', label: 'In Progress' },
+  { value: 'resolved', label: 'Resolved' },
+  { value: 'closed', label: 'Closed' },
+];
+
+export const CHANGELOG_SEVERITIES: { value: ChangelogSeverity; label: string }[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' },
+  { value: 'critical', label: 'Critical' },
 ];

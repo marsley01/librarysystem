@@ -79,6 +79,34 @@ export interface DashboardStats {
   total_fines_outstanding: number;
 }
 
+export interface DemoRequest {
+  id: string;
+  school_name: string;
+  contact_name: string;
+  email: string;
+  phone: string;
+  student_count: string;
+  message: string | null;
+  created_at: string;
+}
+
+export type ChangelogType = 'feature' | 'fix' | 'improvement' | 'issue' | 'announcement';
+export type ChangelogStatus = 'open' | 'in_progress' | 'resolved' | 'closed';
+export type ChangelogSeverity = 'low' | 'medium' | 'high' | 'critical';
+
+export interface ChangelogEntry {
+  id: string;
+  title: string;
+  description: string;
+  type: ChangelogType;
+  status: ChangelogStatus;
+  severity: ChangelogSeverity | null;
+  school_id: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CsvBookRow {
   title: string;
   author: string;
