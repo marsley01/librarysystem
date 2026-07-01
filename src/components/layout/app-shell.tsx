@@ -10,9 +10,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const supabase = createClient();
 
   useEffect(() => {
+    const supabase = createClient();
+    if (!supabase) return;
+
     async function getUser() {
       const {
         data: { user: authUser },
@@ -39,7 +41,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
 
     getUser();
-  }, [router, supabase]);
+  }, [router]);
 
   if (loading) {
     return (

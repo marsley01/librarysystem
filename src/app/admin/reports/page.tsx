@@ -59,12 +59,12 @@ export default function ReportsPage() {
 
       if (records) {
         const counts: Record<string, number> = {};
-        records.forEach((r) => {
+        records.forEach((r: { book_id: string }) => {
           counts[r.book_id] = (counts[r.book_id] || 0) + 1;
         });
 
         const sorted = Object.entries(counts)
-          .sort(([, a], [, b]) => b - a)
+          .sort(([, a]: [string, number], [, b]: [string, number]) => b - a)
           .slice(0, 10);
 
         const mostBorrowedWithTitles: { title: string; count: number }[] = [];

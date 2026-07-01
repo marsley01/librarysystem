@@ -60,8 +60,8 @@ export default function DashboardPage() {
         .eq('school_id', profile.school_id)
         .eq('archived', false);
 
-      const totalBooks = books?.reduce((sum, b) => sum + b.total_copies, 0) || 0;
-      const booksBorrowed = books?.reduce((sum, b) => sum + (b.total_copies - b.available_copies), 0) || 0;
+      const totalBooks = books?.reduce((sum: number, b: { total_copies: number }) => sum + b.total_copies, 0) || 0;
+      const booksBorrowed = books?.reduce((sum: number, b: { total_copies: number; available_copies: number }) => sum + (b.total_copies - b.available_copies), 0) || 0;
 
       const { data: overdue } = await supabase
         .from('borrow_records')
@@ -70,7 +70,7 @@ export default function DashboardPage() {
         .eq('status', 'overdue');
 
       const overdueCount = overdue?.length || 0;
-      const totalFines = overdue?.reduce((sum, r) => sum + Number(r.fine_amount), 0) || 0;
+      const totalFines = overdue?.reduce((sum: number, r: { fine_amount: number }) => sum + Number(r.fine_amount), 0) || 0;
 
       setStats({
         total_books: totalBooks,
