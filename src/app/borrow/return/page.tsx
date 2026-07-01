@@ -166,8 +166,8 @@ export default function ReturnBookPage() {
     <AppShell>
       <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">Return Book</h1>
-          <p className="mt-1 text-sm text-[#6B6B7B]">Scan QR code or search for an active borrow record</p>
+          <h1 className="font-heading text-2xl font-bold text-foreground">Return Book</h1>
+          <p className="mt-1 text-sm text-muted-fg">Scan QR code or search for an active borrow record</p>
         </div>
 
         {success ? (
@@ -176,8 +176,8 @@ export default function ReturnBookPage() {
               <CheckCircle className="h-8 w-8 text-emerald-400" />
             </div>
             <div>
-              <h2 className="font-heading text-xl font-bold text-[#E8E8ED]">Book Returned Successfully</h2>
-              <p className="mt-2 text-sm text-[#6B6B7B]">
+              <h2 className="font-heading text-xl font-bold text-foreground">Book Returned Successfully</h2>
+              <p className="mt-2 text-sm text-muted-fg">
                 {borrowRecord?.book?.title} returned by {borrowRecord?.student_name}
               </p>
               {fineAmount > 0 && (
@@ -193,27 +193,27 @@ export default function ReturnBookPage() {
           </div>
         ) : step === 'scan' ? (
           <div className="space-y-6">
-            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6">
+            <div className="rounded-xl border border-border bg-surface p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Camera className="h-5 w-5 text-[#C5A55A]" />
-                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Scan QR Code</h2>
+                <Camera className="h-5 w-5 text-accent" />
+                <h2 className="font-heading text-base font-semibold text-foreground">Scan QR Code</h2>
               </div>
               <QrScanner onScan={handleQrScan} onError={(msg) => setError(msg)} />
             </div>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#1E1E28]" />
+                <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-[#0B0B0F] px-2 text-[#6B6B7B]">or search by student details</span>
+                <span className="bg-background px-2 text-muted-fg">or search by student details</span>
               </div>
             </div>
 
-            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6">
+            <div className="rounded-xl border border-border bg-surface p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Search className="h-5 w-5 text-[#C5A55A]" />
-                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Search Borrow Records</h2>
+                <Search className="h-5 w-5 text-accent" />
+                <h2 className="font-heading text-base font-semibold text-foreground">Search Borrow Records</h2>
               </div>
               <div className="flex gap-2">
                 <Input
@@ -231,11 +231,11 @@ export default function ReturnBookPage() {
                     <button
                       key={r.id}
                       onClick={() => selectRecord(r)}
-                      className="w-full flex items-center gap-3 rounded-lg border border-[#1E1E28] p-3 text-left hover:border-[#C5A55A]/50 transition-colors"
+                      className="w-full flex items-center gap-3 rounded-lg border border-border p-3 text-left hover:border-accent/50 transition-colors"
                     >
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-[#E8E8ED]">{r.student_name}</p>
-                        <p className="text-xs text-[#6B6B7B]">
+                        <p className="text-sm font-medium text-foreground">{r.student_name}</p>
+                        <p className="text-xs text-muted-fg">
                           {r.book?.title} &middot; Due: {formatDate(r.expected_return_date)}
                         </p>
                       </div>
@@ -254,45 +254,45 @@ export default function ReturnBookPage() {
           /* Confirm Return */
           borrowRecord && borrowRecord.book && (
             <div className="space-y-6">
-              <button onClick={() => { setStep('scan'); setBorrowRecord(null); setError(null); }} className="flex items-center gap-2 text-sm text-[#6B6B7B] hover:text-[#E8E8ED] transition-colors">
+              <button onClick={() => { setStep('scan'); setBorrowRecord(null); setError(null); }} className="flex items-center gap-2 text-sm text-muted-fg hover:text-foreground transition-colors">
                 <ArrowLeft className="h-4 w-4" /> Back to search
               </button>
 
-              <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5">
+              <div className="rounded-xl border border-border bg-surface p-5">
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
-                    <h2 className="font-heading text-lg font-semibold text-[#E8E8ED]">{borrowRecord.book.title}</h2>
-                    <p className="text-sm text-[#6B6B7B]">{borrowRecord.book.author}</p>
+                    <h2 className="font-heading text-lg font-semibold text-foreground">{borrowRecord.book.title}</h2>
+                    <p className="text-sm text-muted-fg">{borrowRecord.book.author}</p>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-4">
-                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Borrow Details</h2>
+              <div className="rounded-xl border border-border bg-surface p-6 space-y-4">
+                <h2 className="font-heading text-base font-semibold text-foreground">Borrow Details</h2>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <p className="text-[#6B6B7B]">Student</p>
-                    <p className="text-[#E8E8ED] font-medium">{borrowRecord.student_name}</p>
+                    <p className="text-muted-fg">Student</p>
+                    <p className="text-foreground font-medium">{borrowRecord.student_name}</p>
                   </div>
                   <div>
-                    <p className="text-[#6B6B7B]">Admission No.</p>
-                    <p className="text-[#E8E8ED] font-medium">{borrowRecord.admission_number}</p>
+                    <p className="text-muted-fg">Admission No.</p>
+                    <p className="text-foreground font-medium">{borrowRecord.admission_number}</p>
                   </div>
                   <div>
-                    <p className="text-[#6B6B7B]">Class</p>
-                    <p className="text-[#E8E8ED] font-medium">{borrowRecord.student_class}</p>
+                    <p className="text-muted-fg">Class</p>
+                    <p className="text-foreground font-medium">{borrowRecord.student_class}</p>
                   </div>
                   <div>
-                    <p className="text-[#6B6B7B]">Status</p>
+                    <p className="text-muted-fg">Status</p>
                     <Badge variant={borrowRecord.status as any}>{borrowRecord.status}</Badge>
                   </div>
                   <div>
-                    <p className="text-[#6B6B7B]">Borrowed</p>
-                    <p className="text-[#E8E8ED] font-medium">{formatDate(borrowRecord.borrow_date)}</p>
+                    <p className="text-muted-fg">Borrowed</p>
+                    <p className="text-foreground font-medium">{formatDate(borrowRecord.borrow_date)}</p>
                   </div>
                   <div>
-                    <p className="text-[#6B6B7B]">Expected Return</p>
-                    <p className="text-[#E8E8ED] font-medium">{formatDate(borrowRecord.expected_return_date)}</p>
+                    <p className="text-muted-fg">Expected Return</p>
+                    <p className="text-foreground font-medium">{formatDate(borrowRecord.expected_return_date)}</p>
                   </div>
                 </div>
 

@@ -19,14 +19,14 @@ function StatCard({
   accent: string;
 }) {
   return (
-    <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5 transition-colors hover:border-[#2A2A35]">
+    <div className="rounded-xl border border-border bg-surface p-5 transition-colors hover:border-border-strong">
       <div className="flex items-center gap-3">
         <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${accent}`}>
           <Icon className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-sm text-[#6B6B7B]">{label}</p>
-          <p className="font-heading text-2xl font-bold text-[#E8E8ED]">{value}</p>
+          <p className="text-sm text-muted-fg">{label}</p>
+          <p className="font-heading text-2xl font-bold text-foreground">{value}</p>
         </div>
       </div>
     </div>
@@ -97,10 +97,10 @@ export default function DashboardPage() {
     <AppShell>
       <div className="space-y-8 animate-fade-in">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">
+          <h1 className="font-heading text-2xl font-bold text-foreground">
             Dashboard
           </h1>
-          <p className="mt-1 text-sm text-[#6B6B7B]">
+          <p className="mt-1 text-sm text-muted-fg">
             Welcome back, {user?.full_name}
           </p>
         </div>
@@ -133,36 +133,36 @@ export default function DashboardPage() {
         </div>
 
         <div>
-          <h2 className="font-heading text-lg font-semibold text-[#E8E8ED] mb-4">
+          <h2 className="font-heading text-lg font-semibold text-foreground mb-4">
             Recent Activity
           </h2>
-          <div className="rounded-xl border border-[#1E1E28] overflow-hidden">
+          <div className="rounded-xl border border-border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#1E1E28] bg-[#0F0F14]">
-                    <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Student</th>
-                    <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Book</th>
-                    <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Action</th>
-                    <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Date</th>
-                    <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Status</th>
+                  <tr className="border-b border-border bg-surface">
+                    <th className="px-4 py-3 text-left font-medium text-muted-fg">Student</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-fg">Book</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-fg">Action</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-fg">Date</th>
+                    <th className="px-4 py-3 text-left font-medium text-muted-fg">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentActivity.length === 0 && (
                     <tr>
-                      <td colSpan={5} className="px-4 py-8 text-center text-sm text-[#4A4A55]">
+                      <td colSpan={5} className="px-4 py-8 text-center text-sm text-dimmed">
                         No activity yet
                       </td>
                     </tr>
                   )}
                   {recentActivity.map((record) => (
-                    <tr key={record.id} className="border-b border-[#1E1E28] last:border-0 hover:bg-[#0F0F14] transition-colors">
+                    <tr key={record.id} className="border-b border-border last:border-0 hover:bg-surface transition-colors">
                       <td className="px-4 py-3">
-                        <p className="text-[#E8E8ED] font-medium">{record.student_name}</p>
-                        <p className="text-xs text-[#6B6B7B]">{record.admission_number}</p>
+                        <p className="text-foreground font-medium">{record.student_name}</p>
+                        <p className="text-xs text-muted-fg">{record.admission_number}</p>
                       </td>
-                      <td className="px-4 py-3 text-[#E8E8ED]">
+                      <td className="px-4 py-3 text-foreground">
                         {(record as any).book?.title || 'Unknown'}
                       </td>
                       <td className="px-4 py-3">
@@ -170,7 +170,7 @@ export default function DashboardPage() {
                           {record.actual_return_date ? 'Returned' : 'Borrowed'}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-[#6B6B7B]">
+                      <td className="px-4 py-3 text-muted-fg">
                         {formatDate(record.borrow_date)}
                       </td>
                       <td className="px-4 py-3">

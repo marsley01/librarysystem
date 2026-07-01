@@ -86,13 +86,13 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
       {error && (
         <div className="text-center space-y-2">
           <p className="text-sm text-red-400">{error}</p>
-          <p className="text-xs text-[#6B6B7B]">
+          <p className="text-xs text-muted-fg">
             Make sure you have granted camera permissions.
             You can also search for the book manually below.
           </p>
           <button
             onClick={retry}
-            className="text-xs text-[#C5A55A] hover:underline"
+            className="text-xs text-accent hover:underline"
           >
             Try Again
           </button>
@@ -100,7 +100,7 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
       )}
 
       {scanning && !error && (
-        <p className="text-center text-xs text-[#6B6B7B]">
+        <p className="text-center text-xs text-muted-fg">
           Point camera at the book&apos;s QR code
         </p>
       )}

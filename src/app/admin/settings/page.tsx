@@ -104,12 +104,12 @@ export default function SettingsPage() {
     <AppShell>
       <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">School Settings</h1>
-          <p className="mt-1 text-sm text-[#6B6B7B]">Configure lending rules and fine rates</p>
+          <h1 className="font-heading text-2xl font-bold text-foreground">School Settings</h1>
+          <p className="mt-1 text-sm text-muted-fg">Configure lending rules and fine rates</p>
         </div>
 
-        <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-6">
-          <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Lending Rules</h2>
+        <div className="rounded-xl border border-border bg-surface p-6 space-y-6">
+          <h2 className="font-heading text-base font-semibold text-foreground">Lending Rules</h2>
 
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -122,7 +122,7 @@ export default function SettingsPage() {
                 value={finePerDay}
                 onChange={(e) => setFinePerDay(e.target.value)}
               />
-              <p className="text-xs text-[#6B6B7B]">
+              <p className="text-xs text-muted-fg">
                 Charged for each day a book is returned late
               </p>
             </div>
@@ -136,16 +136,16 @@ export default function SettingsPage() {
                 value={defaultLoanDays}
                 onChange={(e) => setDefaultLoanDays(e.target.value)}
               />
-              <p className="text-xs text-[#6B6B7B]">
+              <p className="text-xs text-muted-fg">
                 Standard number of days for a book loan
               </p>
             </div>
           </div>
 
-          <div className="rounded-lg border border-[#1E1E28] bg-[#0B0B0F] p-4">
-            <p className="text-sm text-[#9D9DA8]">
-              Preview: <strong className="text-[#E8E8ED]">{formatCurrency(parseFloat(finePerDay) || 0)}/day</strong> fine,{' '}
-              <strong className="text-[#E8E8ED]">{defaultLoanDays}-day</strong> default loan period
+          <div className="rounded-lg border border-border bg-background p-4">
+            <p className="text-sm text-secondary">
+              Preview: <strong className="text-foreground">{formatCurrency(parseFloat(finePerDay) || 0)}/day</strong> fine,{' '}
+              <strong className="text-foreground">{defaultLoanDays}-day</strong> default loan period
             </p>
           </div>
 

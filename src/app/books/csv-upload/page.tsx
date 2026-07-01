@@ -174,16 +174,16 @@ export default function CsvUploadPage() {
             <Button variant="ghost" size="icon"><ArrowLeft className="h-5 w-5" /></Button>
           </Link>
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">Bulk CSV Upload</h1>
-            <p className="text-sm text-[#6B6B7B]">Import multiple books at once using a CSV file</p>
+            <h1 className="font-heading text-2xl font-bold text-foreground">Bulk CSV Upload</h1>
+            <p className="text-sm text-muted-fg">Import multiple books at once using a CSV file</p>
           </div>
         </div>
 
-        <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-6">
+        <div className="rounded-xl border border-border bg-surface p-6 space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">CSV Template</h2>
-              <p className="text-sm text-[#6B6B7B] mt-1">Download our template to ensure correct formatting</p>
+              <h2 className="font-heading text-base font-semibold text-foreground">CSV Template</h2>
+              <p className="text-sm text-muted-fg mt-1">Download our template to ensure correct formatting</p>
             </div>
             <Button variant="outline" onClick={downloadTemplate}>
               <FileDown className="h-4 w-4 mr-2" />
@@ -191,15 +191,15 @@ export default function CsvUploadPage() {
             </Button>
           </div>
 
-          <div className="border-t border-[#1E1E28]" />
+          <div className="border-t border-border" />
 
           <div>
-            <label className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-[#2A2A35] bg-transparent p-8 cursor-pointer hover:border-[#C5A55A]/50 transition-colors">
-              <Upload className="h-8 w-8 text-[#6B6B7B] mb-3" />
-              <p className="text-sm text-[#9D9DA8]">
+            <label className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-border-strong bg-transparent p-8 cursor-pointer hover:border-accent/50 transition-colors">
+              <Upload className="h-8 w-8 text-muted-fg mb-3" />
+              <p className="text-sm text-secondary">
                 {file ? file.name : 'Click to select CSV file'}
               </p>
-              <p className="text-xs text-[#4A4A55] mt-1">.csv files only</p>
+              <p className="text-xs text-dimmed mt-1">.csv files only</p>
               <input
                 ref={fileRef}
                 type="file"
@@ -212,21 +212,21 @@ export default function CsvUploadPage() {
 
           {preview.length > 0 && (
             <div>
-              <h3 className="text-sm font-medium text-[#E8E8ED] mb-2">Preview ({preview.length} rows)</h3>
-              <div className="rounded-lg border border-[#1E1E28] overflow-x-auto">
+              <h3 className="text-sm font-medium text-foreground mb-2">Preview ({preview.length} rows)</h3>
+              <div className="rounded-lg border border-border overflow-x-auto">
                 <table className="w-full text-xs">
                   <thead>
-                    <tr className="bg-[#0B0B0F]">
+                    <tr className="bg-background">
                       {Object.keys(preview[0]).map((h) => (
-                        <th key={h} className="px-2 py-1.5 text-left text-[#6B6B7B] font-medium">{h}</th>
+                        <th key={h} className="px-2 py-1.5 text-left text-muted-fg font-medium">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {preview.map((row, idx) => (
-                      <tr key={idx} className="border-t border-[#1E1E28]">
+                      <tr key={idx} className="border-t border-border">
                         {Object.values(row).map((val, jdx) => (
-                          <td key={jdx} className="px-2 py-1.5 text-[#9D9DA8]">{String(val).substring(0, 30)}</td>
+                          <td key={jdx} className="px-2 py-1.5 text-secondary">{String(val).substring(0, 30)}</td>
                         ))}
                       </tr>
                     ))}
@@ -251,7 +251,7 @@ export default function CsvUploadPage() {
                   <AlertCircle className="h-5 w-5 text-amber-400 mt-0.5" />
                 )}
                 <div>
-                  <p className="text-sm font-medium text-[#E8E8ED]">
+                  <p className="text-sm font-medium text-foreground">
                     {results.success} book{results.success !== 1 ? 's' : ''} imported successfully
                   </p>
                   {results.errors.length > 0 && (

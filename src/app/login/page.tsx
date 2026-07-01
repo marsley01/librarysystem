@@ -50,16 +50,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0B0B0F] p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-[#C5A55A]">
-            <Library className="h-7 w-7 text-[#0B0B0F]" />
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-accent">
+            <Library className="h-7 w-7 text-background" />
           </div>
-          <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">
+          <h1 className="font-heading text-2xl font-bold text-foreground">
             {APP_NAME}
           </h1>
-          <p className="mt-1 text-sm text-[#6B6B7B]">
+          <p className="mt-1 text-sm text-muted-fg">
             Library Management System
           </p>
         </div>
@@ -115,7 +115,7 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-[#4A4A55]">
+        <p className="mt-6 text-center text-xs text-dimmed">
           KenyaLibrarySystems &copy; {new Date().getFullYear()}
         </p>
       </div>

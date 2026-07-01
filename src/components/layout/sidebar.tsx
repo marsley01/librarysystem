@@ -54,16 +54,16 @@ export function Sidebar({ user }: SidebarProps) {
   };
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-[#1E1E28] bg-[#0B0B0F] flex flex-col">
-      <div className="flex items-center gap-3 px-6 py-5 border-b border-[#1E1E28]">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#C5A55A]">
-          <Library className="h-5 w-5 text-[#0B0B0F]" />
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-background flex flex-col">
+      <div className="flex items-center gap-3 px-6 py-5 border-b border-border">
+        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent">
+          <Library className="h-5 w-5 text-background" />
         </div>
         <div>
-          <h1 className="font-heading text-base font-bold text-[#E8E8ED]">
+          <h1 className="font-heading text-base font-bold text-foreground">
             {APP_SHORT_NAME}
           </h1>
-          <p className="text-xs text-[#6B6B7B]">Library System</p>
+          <p className="text-xs text-muted-fg">Library System</p>
         </div>
       </div>
 
@@ -79,32 +79,32 @@ export function Sidebar({ user }: SidebarProps) {
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 isActive
-                  ? 'bg-[#C5A55A]/10 text-[#C5A55A]'
-                  : 'text-[#6B6B7B] hover:bg-[#1E1E28] hover:text-[#E8E8ED]'
+                  ? 'bg-accent/10 text-accent'
+                  : 'text-muted-fg hover:bg-muted hover:text-foreground'
               )}
             >
-              <Icon className={cn('h-4 w-4', isActive && 'text-[#C5A55A]')} />
+              <Icon className={cn('h-4 w-4', isActive && 'text-accent')} />
               {item.label}
             </Link>
           );
         })}
       </nav>
 
-      <div className="border-t border-[#1E1E28] px-3 py-4">
+      <div className="border-t border-border px-3 py-4">
         <div className="flex items-center gap-3 px-3 py-2 mb-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1E1E28] text-sm font-medium text-[#C5A55A]">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-medium text-accent">
             {user.full_name.charAt(0).toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-[#E8E8ED] truncate">
+            <p className="text-sm font-medium text-foreground truncate">
               {user.full_name}
             </p>
-            <p className="text-xs text-[#6B6B7B] capitalize">{user.role}</p>
+            <p className="text-xs text-muted-fg capitalize">{user.role}</p>
           </div>
         </div>
         <button
           onClick={handleSignOut}
-          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-[#6B6B7B] hover:bg-[#1E1E28] hover:text-red-400 transition-all duration-200"
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-fg hover:bg-muted hover:text-red-400 transition-all duration-200"
         >
           <LogOut className="h-4 w-4" />
           Sign Out

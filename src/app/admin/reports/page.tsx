@@ -109,22 +109,22 @@ export default function ReportsPage() {
       <div className="space-y-8 animate-fade-in">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">Reports</h1>
-            <p className="mt-1 text-sm text-[#6B6B7B]">Library usage data and insights</p>
+            <h1 className="font-heading text-2xl font-bold text-foreground">Reports</h1>
+            <p className="mt-1 text-sm text-muted-fg">Library usage data and insights</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5">
-            <p className="text-sm text-[#6B6B7B]">Books Borrowed This Month</p>
-            <p className="font-heading text-3xl font-bold text-[#E8E8ED] mt-1">{monthlyBorrows}</p>
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <p className="text-sm text-muted-fg">Books Borrowed This Month</p>
+            <p className="font-heading text-3xl font-bold text-foreground mt-1">{monthlyBorrows}</p>
           </div>
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5">
-            <p className="text-sm text-[#6B6B7B]">Overdue Items</p>
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <p className="text-sm text-muted-fg">Overdue Items</p>
             <p className="font-heading text-3xl font-bold text-red-400 mt-1">{overdueList.length}</p>
           </div>
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5">
-            <p className="text-sm text-[#6B6B7B]">Total Fines Outstanding</p>
+          <div className="rounded-xl border border-border bg-surface p-5">
+            <p className="text-sm text-muted-fg">Total Fines Outstanding</p>
             <p className="font-heading text-3xl font-bold text-amber-400 mt-1">
               {formatCurrency(overdueList.reduce((s, r) => s + Number(r.fine_amount), 0))}
             </p>
@@ -133,9 +133,9 @@ export default function ReportsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Overdue List */}
-          <div className="rounded-xl border border-[#1E1E28]">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E1E28]">
-              <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Overdue Records</h2>
+          <div className="rounded-xl border border-border">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h2 className="font-heading text-base font-semibold text-foreground">Overdue Records</h2>
               <Button variant="ghost" size="sm" onClick={() => exportCsv('overdue')}>
                 <Download className="h-4 w-4 mr-1" />
                 CSV
@@ -144,11 +144,11 @@ export default function ReportsPage() {
             <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#0F0F14]">
-                    <th className="px-4 py-2.5 text-left font-medium text-[#6B6B7B]">Student</th>
-                    <th className="px-4 py-2.5 text-left font-medium text-[#6B6B7B]">Book</th>
-                    <th className="px-4 py-2.5 text-left font-medium text-[#6B6B7B]">Due</th>
-                    <th className="px-4 py-2.5 text-left font-medium text-[#6B6B7B]">Days</th>
+                  <tr className="bg-surface">
+                    <th className="px-4 py-2.5 text-left font-medium text-muted-fg">Student</th>
+                    <th className="px-4 py-2.5 text-left font-medium text-muted-fg">Book</th>
+                    <th className="px-4 py-2.5 text-left font-medium text-muted-fg">Due</th>
+                    <th className="px-4 py-2.5 text-left font-medium text-muted-fg">Days</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,10 +158,10 @@ export default function ReportsPage() {
                         (1000 * 60 * 60 * 24)
                     );
                     return (
-                      <tr key={r.id} className="border-t border-[#1E1E28] hover:bg-[#0F0F14]">
-                        <td className="px-4 py-2.5 text-[#E8E8ED]">{r.student_name}</td>
-                        <td className="px-4 py-2.5 text-[#9D9DA8]">{(r as any).book?.title?.substring(0, 30) || 'Unknown'}</td>
-                        <td className="px-4 py-2.5 text-[#6B6B7B]">{formatDate(r.expected_return_date)}</td>
+                      <tr key={r.id} className="border-t border-border hover:bg-surface">
+                        <td className="px-4 py-2.5 text-foreground">{r.student_name}</td>
+                        <td className="px-4 py-2.5 text-secondary">{(r as any).book?.title?.substring(0, 30) || 'Unknown'}</td>
+                        <td className="px-4 py-2.5 text-muted-fg">{formatDate(r.expected_return_date)}</td>
                         <td className="px-4 py-2.5">
                           <Badge variant="overdue">{days}d</Badge>
                         </td>
@@ -170,7 +170,7 @@ export default function ReportsPage() {
                   })}
                   {overdueList.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="px-4 py-8 text-center text-sm text-[#4A4A55]">
+                      <td colSpan={4} className="px-4 py-8 text-center text-sm text-dimmed">
                         No overdue records
                       </td>
                     </tr>
@@ -181,25 +181,25 @@ export default function ReportsPage() {
           </div>
 
           {/* Most Borrowed Books */}
-          <div className="rounded-xl border border-[#1E1E28]">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E1E28]">
-              <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Most Borrowed Books</h2>
-              <BarChart3 className="h-4 w-4 text-[#6B6B7B]" />
+          <div className="rounded-xl border border-border">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+              <h2 className="font-heading text-base font-semibold text-foreground">Most Borrowed Books</h2>
+              <BarChart3 className="h-4 w-4 text-muted-fg" />
             </div>
             <div className="p-5">
               {mostBorrowed.length === 0 && (
-                <p className="text-sm text-[#4A4A55] text-center py-8">No data yet</p>
+                <p className="text-sm text-dimmed text-center py-8">No data yet</p>
               )}
               <div className="space-y-3">
                 {mostBorrowed.map((item, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#1E1E28] text-xs font-medium text-[#6B6B7B]">
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-fg">
                       {idx + 1}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-[#E8E8ED] truncate">{item.title}</p>
+                      <p className="text-sm text-foreground truncate">{item.title}</p>
                     </div>
-                    <span className="text-sm font-medium text-[#C5A55A]">{item.count}x</span>
+                    <span className="text-sm font-medium text-accent">{item.count}x</span>
                   </div>
                 ))}
               </div>

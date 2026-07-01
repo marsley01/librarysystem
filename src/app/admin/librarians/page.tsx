@@ -133,8 +133,8 @@ export default function LibrariansPage() {
       <div className="space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">Librarians</h1>
-            <p className="mt-1 text-sm text-[#6B6B7B]">Manage librarian accounts</p>
+            <h1 className="font-heading text-2xl font-bold text-foreground">Librarians</h1>
+            <p className="mt-1 text-sm text-muted-fg">Manage librarian accounts</p>
           </div>
           <Button onClick={() => setShowInvite(true)}>
             <UserPlus className="h-4 w-4 mr-2" />
@@ -142,43 +142,43 @@ export default function LibrariansPage() {
           </Button>
         </div>
 
-        <div className="rounded-xl border border-[#1E1E28] overflow-hidden">
+        <div className="rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1E1E28] bg-[#0F0F14]">
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Name</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Email</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Status</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Joined</th>
-                  <th className="px-4 py-3 text-right font-medium text-[#6B6B7B]">Actions</th>
+                <tr className="border-b border-border bg-surface">
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Name</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Email</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Status</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Joined</th>
+                  <th className="px-4 py-3 text-right font-medium text-muted-fg">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {librarians.length === 0 && (
                   <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-sm text-[#4A4A55]">
+                    <td colSpan={5} className="px-4 py-8 text-center text-sm text-dimmed">
                       No librarians yet
                     </td>
                   </tr>
                 )}
                 {librarians.map((librarian) => (
-                  <tr key={librarian.id} className="border-b border-[#1E1E28] last:border-0 hover:bg-[#0F0F14] transition-colors">
+                  <tr key={librarian.id} className="border-b border-border last:border-0 hover:bg-surface transition-colors">
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#1E1E28] text-sm font-medium text-[#C5A55A]">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-medium text-accent">
                           {librarian.full_name.charAt(0)}
                         </div>
-                        <p className="text-[#E8E8ED] font-medium">{librarian.full_name}</p>
+                        <p className="text-foreground font-medium">{librarian.full_name}</p>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-[#9D9DA8]">{librarian.email}</td>
+                    <td className="px-4 py-3 text-secondary">{librarian.email}</td>
                     <td className="px-4 py-3">
                       <Badge variant={librarian.is_active ? 'good' : 'damaged'}>
                         {librarian.is_active ? 'Active' : 'Inactive'}
                       </Badge>
                     </td>
-                    <td className="px-4 py-3 text-[#6B6B7B]">{formatDate(librarian.created_at)}</td>
+                    <td className="px-4 py-3 text-muted-fg">{formatDate(librarian.created_at)}</td>
                     <td className="px-4 py-3 text-right">
                       {librarian.is_active ? (
                         <Button variant="ghost" size="sm" onClick={() => handleDeactivate(librarian.id)}>

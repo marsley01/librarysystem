@@ -159,34 +159,34 @@ export default function IssueBookPage() {
     <AppShell>
       <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">Issue Book</h1>
-          <p className="mt-1 text-sm text-[#6B6B7B]">Scan QR code or search to find a book</p>
+          <h1 className="font-heading text-2xl font-bold text-foreground">Issue Book</h1>
+          <p className="mt-1 text-sm text-muted-fg">Scan QR code or search to find a book</p>
         </div>
 
         {/* Step 1: Scan / Search */}
         {step === 'scan' && (
           <div className="space-y-6">
-            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6">
+            <div className="rounded-xl border border-border bg-surface p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Camera className="h-5 w-5 text-[#C5A55A]" />
-                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Scan QR Code</h2>
+                <Camera className="h-5 w-5 text-accent" />
+                <h2 className="font-heading text-base font-semibold text-foreground">Scan QR Code</h2>
               </div>
               <QrScanner onScan={handleQrScan} onError={(msg) => setError(msg)} />
             </div>
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-[#1E1E28]" />
+                <div className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-[#0B0B0F] px-2 text-[#6B6B7B]">or search manually</span>
+                <span className="bg-background px-2 text-muted-fg">or search manually</span>
               </div>
             </div>
 
-            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6">
+            <div className="rounded-xl border border-border bg-surface p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Search className="h-5 w-5 text-[#C5A55A]" />
-                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Search Book</h2>
+                <Search className="h-5 w-5 text-accent" />
+                <h2 className="font-heading text-base font-semibold text-foreground">Search Book</h2>
               </div>
               <div className="flex gap-2">
                 <Input
@@ -204,11 +204,11 @@ export default function IssueBookPage() {
                     <button
                       key={b.id}
                       onClick={() => selectBook(b)}
-                      className="w-full flex items-center gap-3 rounded-lg border border-[#1E1E28] p-3 text-left hover:border-[#C5A55A]/50 transition-colors"
+                      className="w-full flex items-center gap-3 rounded-lg border border-border p-3 text-left hover:border-accent/50 transition-colors"
                     >
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-[#E8E8ED]">{b.title}</p>
-                        <p className="text-xs text-[#6B6B7B]">{b.author} &middot; {b.available_copies} available</p>
+                        <p className="text-sm font-medium text-foreground">{b.title}</p>
+                        <p className="text-xs text-muted-fg">{b.author} &middot; {b.available_copies} available</p>
                       </div>
                       <Badge variant={b.available_copies > 0 ? 'new' : 'damaged'}>
                         {b.available_copies > 0 ? 'Available' : 'Out'}
@@ -228,30 +228,30 @@ export default function IssueBookPage() {
         {/* Step 2: Student Details */}
         {step === 'details' && book && (
           <div className="space-y-6">
-            <button onClick={() => { setStep('scan'); setBook(null); setError(null); }} className="flex items-center gap-2 text-sm text-[#6B6B7B] hover:text-[#E8E8ED] transition-colors">
+            <button onClick={() => { setStep('scan'); setBook(null); setError(null); }} className="flex items-center gap-2 text-sm text-muted-fg hover:text-foreground transition-colors">
               <ArrowLeft className="h-4 w-4" /> Back to search
             </button>
 
-            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5">
+            <div className="rounded-xl border border-border bg-surface p-5">
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#C5A55A]/10">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10">
                   <QRCodeSVG value={book.qr_code_value} size={40} fgColor="#C5A55A" bgColor="transparent" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="font-heading text-lg font-semibold text-[#E8E8ED]">{book.title}</h2>
-                  <p className="text-sm text-[#6B6B7B]">{book.author}</p>
+                  <h2 className="font-heading text-lg font-semibold text-foreground">{book.title}</h2>
+                  <p className="text-sm text-muted-fg">{book.author}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <Badge variant={book.available_copies > 0 ? 'new' : 'damaged'}>
                       {book.available_copies} of {book.total_copies} available
                     </Badge>
-                    {book.isbn && <span className="text-xs text-[#4A4A55]">ISBN: {book.isbn}</span>}
+                    {book.isbn && <span className="text-xs text-dimmed">ISBN: {book.isbn}</span>}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-4">
-              <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Student Details</h2>
+            <div className="rounded-xl border border-border bg-surface p-6 space-y-4">
+              <h2 className="font-heading text-base font-semibold text-foreground">Student Details</h2>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2 col-span-2">
@@ -272,7 +272,7 @@ export default function IssueBookPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Expected Return</Label>
-                  <div className="flex h-10 items-center rounded-lg border border-[#2A2A35] bg-[#14141A] px-3 text-sm text-[#E8E8ED]">
+                  <div className="flex h-10 items-center rounded-lg border border-border-strong bg-input px-3 text-sm text-foreground">
                     {calculateReturnDate()}
                   </div>
                 </div>
@@ -296,12 +296,12 @@ export default function IssueBookPage() {
               <CheckCircle className="h-8 w-8 text-emerald-400" />
             </div>
             <div>
-              <h2 className="font-heading text-xl font-bold text-[#E8E8ED]">Book Issued Successfully</h2>
-              <p className="mt-2 text-sm text-[#6B6B7B]">
-                <span className="font-medium text-[#E8E8ED]">{book.title}</span> issued to{' '}
-                <span className="font-medium text-[#E8E8ED]">{studentName}</span>
+              <h2 className="font-heading text-xl font-bold text-foreground">Book Issued Successfully</h2>
+              <p className="mt-2 text-sm text-muted-fg">
+                <span className="font-medium text-foreground">{book.title}</span> issued to{' '}
+                <span className="font-medium text-foreground">{studentName}</span>
               </p>
-              <p className="text-xs text-[#4A4A55] mt-1">
+              <p className="text-xs text-dimmed mt-1">
                 Due back: {calculateReturnDate()}
               </p>
             </div>

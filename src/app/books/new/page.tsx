@@ -114,18 +114,18 @@ export default function NewBookPage() {
             </Button>
           </Link>
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">
+            <h1 className="font-heading text-2xl font-bold text-foreground">
               Add New Book
             </h1>
-            <p className="text-sm text-[#6B6B7B]">
+            <p className="text-sm text-muted-fg">
               A unique QR code will be auto-generated for this book
             </p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-5">
-            <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Book Details</h2>
+          <div className="rounded-xl border border-border bg-surface p-6 space-y-5">
+            <h2 className="font-heading text-base font-semibold text-foreground">Book Details</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2 col-span-2">
@@ -181,8 +181,8 @@ export default function NewBookPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-5">
-            <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Classification</h2>
+          <div className="rounded-xl border border-border bg-surface p-6 space-y-5">
+            <h2 className="font-heading text-base font-semibold text-foreground">Classification</h2>
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
@@ -229,8 +229,8 @@ export default function NewBookPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-5">
-            <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Location & Condition</h2>
+          <div className="rounded-xl border border-border bg-surface p-6 space-y-5">
+            <h2 className="font-heading text-base font-semibold text-foreground">Location & Condition</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">

@@ -5,12 +5,64 @@
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-background: var(--bg);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-foreground: var(--fg);
+  --color-secondary: var(--secondary);
+  --color-muted-fg: var(--muted-fg);
+  --color-dimmed: var(--dimmed);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+}
+
+/* ─── Light Theme (default) ────────────────────────────────── */
+
+:root {
+  --bg: #F8F6F1;
+  --surface: #FFFFFF;
+  --muted: #F0EEE8;
+  --input: #FFFFFF;
+  --border: #E8E5DE;
+  --border-strong: #D0CCC4;
+  --fg: #1A1A24;
+  --secondary: #4A4A55;
+  --muted-fg: #6B6B7B;
+  --dimmed: #9D9DA8;
+  --accent: #D4A94A;
+  --accent-hover: #C49A3C;
+  --scrollbar-track: #E8E5DE;
+  --scrollbar-thumb: #D0CCC4;
+  --scrollbar-thumb-hover: #B8B4AC;
+}
+
+/* ─── Dark Theme ───────────────────────────────────────────── */
+
+.dark {
+  --bg: #0B0B0F;
+  --surface: #0F0F14;
+  --muted: #1E1E28;
+  --input: #14141A;
+  --border: #1E1E28;
+  --border-strong: #2A2A35;
+  --fg: #E8E8ED;
+  --secondary: #9D9DA8;
+  --muted-fg: #6B6B7B;
+  --dimmed: #4A4A55;
+  --accent: #C5A55A;
+  --accent-hover: #B8953E;
+  --scrollbar-track: #0B0B0F;
+  --scrollbar-thumb: #2A2A35;
+  --scrollbar-thumb-hover: #3A3A45;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #0B0B0F;
-  color: #E8E8ED;
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
 @layer utilities {
@@ -59,16 +111,16 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0B0F;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A2A35;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3A3A45;
+  background: var(--scrollbar-thumb-hover);
 }
 
 /* Print styles for QR labels */

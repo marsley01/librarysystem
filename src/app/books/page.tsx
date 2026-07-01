@@ -111,10 +111,10 @@ export default function BooksPage() {
       <div className="space-y-6 animate-fade-in">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">
+            <h1 className="font-heading text-2xl font-bold text-foreground">
               Books
             </h1>
-            <p className="mt-1 text-sm text-[#6B6B7B]">
+            <p className="mt-1 text-sm text-muted-fg">
               {books.length} book{books.length !== 1 ? 's' : ''} in inventory
             </p>
           </div>
@@ -143,7 +143,7 @@ export default function BooksPage() {
         {/* Filters */}
         <div className="flex flex-wrap gap-3">
           <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6B6B7B]" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-fg" />
             <Input
               placeholder="Search by title, author, ISBN, or QR..."
               value={search}
@@ -205,57 +205,57 @@ export default function BooksPage() {
         </div>
 
         {/* Books Table */}
-        <div className="rounded-xl border border-[#1E1E28] overflow-hidden">
+        <div className="rounded-xl border border-border overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-[#1E1E28] bg-[#0F0F14]">
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B] w-8"></th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Title</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Author</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">ISBN</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Category</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Copies</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">Condition</th>
-                  <th className="px-4 py-3 text-left font-medium text-[#6B6B7B]">QR</th>
-                  <th className="px-4 py-3 text-right font-medium text-[#6B6B7B]">Actions</th>
+                <tr className="border-b border-border bg-surface">
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg w-8"></th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Title</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Author</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">ISBN</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Category</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Copies</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">Condition</th>
+                  <th className="px-4 py-3 text-left font-medium text-muted-fg">QR</th>
+                  <th className="px-4 py-3 text-right font-medium text-muted-fg">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {books.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="px-4 py-12 text-center text-sm text-[#4A4A55]">
+                    <td colSpan={9} className="px-4 py-12 text-center text-sm text-dimmed">
                       No books found. Add your first book to get started.
                     </td>
                   </tr>
                 )}
                 {books.map((book) => (
-                  <tr key={book.id} className="border-b border-[#1E1E28] last:border-0 hover:bg-[#0F0F14] transition-colors">
+                  <tr key={book.id} className="border-b border-border last:border-0 hover:bg-surface transition-colors">
                     <td className="px-4 py-3">
                       <div className={`h-2 w-2 rounded-full ${
                         book.available_copies > 0 ? 'bg-emerald-500' : 'bg-red-500'
                       }`} />
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-[#E8E8ED] font-medium">{book.title}</p>
+                      <p className="text-foreground font-medium">{book.title}</p>
                       {book.subject && (
-                        <p className="text-xs text-[#6B6B7B]">{book.subject}</p>
+                        <p className="text-xs text-muted-fg">{book.subject}</p>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-[#9D9DA8]">{book.author}</td>
-                    <td className="px-4 py-3 text-[#6B6B7B] font-mono text-xs">
+                    <td className="px-4 py-3 text-secondary">{book.author}</td>
+                    <td className="px-4 py-3 text-muted-fg font-mono text-xs">
                       {book.isbn || '-'}
                     </td>
                     <td className="px-4 py-3">
                       {book.category && (
-                        <span className="inline-flex items-center rounded-md border border-[#2A2A35] bg-[#1E1E28] px-2 py-0.5 text-xs text-[#9D9DA8]">
+                        <span className="inline-flex items-center rounded-md border border-border-strong bg-muted px-2 py-0.5 text-xs text-secondary">
                           {book.category}
                         </span>
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="text-[#E8E8ED] font-medium">{book.available_copies}</span>
-                      <span className="text-[#4A4A55]">/{book.total_copies}</span>
+                      <span className="text-foreground font-medium">{book.available_copies}</span>
+                      <span className="text-dimmed">/{book.total_copies}</span>
                     </td>
                     <td className="px-4 py-3">
                       {book.condition && (

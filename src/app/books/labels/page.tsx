@@ -69,10 +69,10 @@ export default function LabelsPage() {
       <div className="space-y-6 animate-fade-in">
         <div className="flex items-center justify-between no-print">
           <div>
-            <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">
+            <h1 className="font-heading text-2xl font-bold text-foreground">
               QR Code Labels
             </h1>
-            <p className="mt-1 text-sm text-[#6B6B7B]">
+            <p className="mt-1 text-sm text-muted-fg">
               Select books to print QR code labels for spine or cover placement
             </p>
           </div>
@@ -94,19 +94,19 @@ export default function LabelsPage() {
               onClick={() => toggleSelect(book.id)}
               className={`rounded-lg border p-3 text-left transition-all ${
                 selectedIds.has(book.id)
-                  ? 'border-[#C5A55A] bg-[#C5A55A]/10'
-                  : 'border-[#1E1E28] bg-[#0F0F14] hover:border-[#2A2A35]'
+                  ? 'border-accent bg-accent/10'
+                  : 'border-border bg-surface hover:border-border-strong'
               }`}
             >
               <div className="flex items-center justify-center mb-2">
                 <QRCodeSVG value={book.qr_code_value} size={48} fgColor="#C5A55A" bgColor="transparent" />
               </div>
-              <p className="text-xs font-medium text-[#E8E8ED] truncate">{book.title}</p>
-              <p className="text-xs text-[#6B6B7B] truncate">{book.author}</p>
+              <p className="text-xs font-medium text-foreground truncate">{book.title}</p>
+              <p className="text-xs text-muted-fg truncate">{book.author}</p>
             </button>
           ))}
           {books.length === 0 && (
-            <div className="col-span-full text-center py-12 text-sm text-[#4A4A55]">
+            <div className="col-span-full text-center py-12 text-sm text-dimmed">
               No books available. Add books first to print labels.
             </div>
           )}

@@ -107,7 +107,7 @@ export default function EditBookPage() {
     return (
       <AppShell>
         <div className="flex items-center justify-center py-20">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C5A55A] border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
         </div>
       </AppShell>
     );
@@ -116,7 +116,7 @@ export default function EditBookPage() {
   if (!book) {
     return (
       <AppShell>
-        <div className="text-center py-20 text-[#6B6B7B]">Book not found</div>
+        <div className="text-center py-20 text-muted-fg">Book not found</div>
       </AppShell>
     );
   }
@@ -136,22 +136,22 @@ export default function EditBookPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">
+              <h1 className="font-heading text-2xl font-bold text-foreground">
                 Edit Book
               </h1>
-              <p className="text-sm text-[#6B6B7B]">{book.title}</p>
+              <p className="text-sm text-muted-fg">{book.title}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 rounded-lg border border-[#1E1E28] bg-[#0F0F14] p-3">
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-surface p-3">
             <QRCodeSVG value={book.qr_code_value} size={48} fgColor="#C5A55A" bgColor="transparent" />
-            <div className="text-xs text-[#6B6B7B] font-mono">
+            <div className="text-xs text-muted-fg font-mono">
               {book.qr_code_value}
             </div>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-5">
+          <div className="rounded-xl border border-border bg-surface p-6 space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2 col-span-2">
                 <Label htmlFor="title">Title *</Label>
@@ -176,7 +176,7 @@ export default function EditBookPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-5">
+          <div className="rounded-xl border border-border bg-surface p-6 space-y-5">
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label>Category</Label>
@@ -208,7 +208,7 @@ export default function EditBookPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-5">
+          <div className="rounded-xl border border-border bg-surface p-6 space-y-5">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="shelf_number">Shelf Number</Label>

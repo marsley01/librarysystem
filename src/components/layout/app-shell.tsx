@@ -45,10 +45,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-[#0B0B0F]">
+      <div className="flex h-screen items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C5A55A] border-t-transparent" />
-          <p className="text-sm text-[#6B6B7B]">Loading...</p>
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+          <p className="text-sm text-muted-fg">Loading...</p>
         </div>
       </div>
     );
@@ -57,7 +57,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   if (!user) return null;
 
   return (
-    <div className="flex min-h-screen bg-[#0B0B0F]">
+    <div className="flex min-h-screen bg-background">
       <Sidebar user={user} />
       <main className="flex-1 ml-64 min-h-screen">
         <div className="p-8">{children}</div>
