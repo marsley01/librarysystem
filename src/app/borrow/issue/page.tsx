@@ -1,0 +1,317 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/lib/supabase/client';
+import { AppShell } from '@/components/layout/app-shell';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { QrScanner } from '@/components/qr/scanner';
+import { Badge } from '@/components/ui/badge';
+import { Search, Camera, BookOpen, CheckCircle, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { QRCodeSVG } from 'qrcode.react';
+import type { Book, User } from '@/types/database';
+
+export default function IssueBookPage() {
+  const [step, setStep] = useState<'scan' | 'details' | 'confirm'>('scan');
+  const [book, setBook] = useState<Book | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [qrInput, setQrInput] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [searchResults, setSearchResults] = useState<Book[]>([]);
+  const [studentName, setStudentName] = useState('');
+  const [admissionNumber, setAdmissionNumber] = useState('');
+  const [studentClass, setStudentClass] = useState('');
+  const [expectedDays, setExpectedDays] = useState('14');
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    async function load() {
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (!authUser) return;
+
+      const { data: profile } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', authUser.id)
+        .single();
+
+      if (profile) setUser(profile);
+    }
+    load();
+  }, [supabase]);
+
+  const handleQrScan = async (value: string) => {
+    if (!user) return;
+    setQrInput(value);
+
+    const { data } = await supabase
+      .from('books')
+      .select('*')
+      .eq('qr_code_value', value)
+      .eq('school_id', user.school_id)
+      .eq('archived', false)
+      .single();
+
+    if (data) {
+      if (data.available_copies <= 0) {
+        setError('No available copies to borrow');
+        return;
+      }
+      setBook(data);
+      setStep('details');
+      setError(null);
+    } else {
+      setError('Book not found or is archived');
+    }
+  };
+
+  const handleManualSearch = async () => {
+    if (!user || !searchInput.trim()) return;
+
+    const { data } = await supabase
+      .from('books')
+      .select('*')
+      .eq('school_id', user.school_id)
+      .eq('archived', false)
+      .or(`title.ilike.%${searchInput}%,author.ilike.%${searchInput}%,isbn.ilike.%${searchInput}%,qr_code_value.ilike.%${searchInput}%`)
+      .limit(10);
+
+    if (data) setSearchResults(data);
+  };
+
+  const selectBook = (b: Book) => {
+    if (b.available_copies <= 0) {
+      setError('No available copies');
+      return;
+    }
+    setBook(b);
+    setStep('details');
+    setError(null);
+  };
+
+  const calculateReturnDate = () => {
+    const date = new Date();
+    date.setDate(date.getDate() + parseInt(expectedDays));
+    return date.toISOString().split('T')[0];
+  };
+
+  const handleIssue = async () => {
+    if (!user || !book) return;
+
+    if (!studentName || !admissionNumber || !studentClass) {
+      setError('Please fill in all student details');
+      return;
+    }
+
+    setSubmitting(true);
+    setError(null);
+
+    const returnDate = calculateReturnDate();
+
+    const { error: borrowError } = await supabase.from('borrow_records').insert({
+      school_id: user.school_id,
+      book_id: book.id,
+      student_name: studentName,
+      admission_number: admissionNumber,
+      student_class: studentClass,
+      borrow_date: new Date().toISOString().split('T')[0],
+      expected_return_date: returnDate,
+      status: 'borrowed',
+      issued_by: user.id,
+    });
+
+    if (borrowError) {
+      setError(borrowError.message);
+      setSubmitting(false);
+      return;
+    }
+
+    // Decrement available copies
+    await supabase
+      .from('books')
+      .update({ available_copies: book.available_copies - 1 })
+      .eq('id', book.id);
+
+    setStep('confirm');
+    setSubmitting(false);
+  };
+
+  const resetForm = () => {
+    setStep('scan');
+    setBook(null);
+    setQrInput('');
+    setSearchInput('');
+    setSearchResults([]);
+    setStudentName('');
+    setAdmissionNumber('');
+    setStudentClass('');
+    setExpectedDays('14');
+    setError(null);
+  };
+
+  return (
+    <AppShell>
+      <div className="max-w-2xl mx-auto space-y-8 animate-fade-in">
+        <div>
+          <h1 className="font-heading text-2xl font-bold text-[#E8E8ED]">Issue Book</h1>
+          <p className="mt-1 text-sm text-[#6B6B7B]">Scan QR code or search to find a book</p>
+        </div>
+
+        {/* Step 1: Scan / Search */}
+        {step === 'scan' && (
+          <div className="space-y-6">
+            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Camera className="h-5 w-5 text-[#C5A55A]" />
+                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Scan QR Code</h2>
+              </div>
+              <QrScanner onScan={handleQrScan} onError={(msg) => setError(msg)} />
+            </div>
+
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-[#1E1E28]" />
+              </div>
+              <div className="relative flex justify-center text-xs">
+                <span className="bg-[#0B0B0F] px-2 text-[#6B6B7B]">or search manually</span>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Search className="h-5 w-5 text-[#C5A55A]" />
+                <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Search Book</h2>
+              </div>
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Search by title, author, ISBN, or QR..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleManualSearch()}
+                />
+                <Button onClick={handleManualSearch}><Search className="h-4 w-4" /></Button>
+              </div>
+
+              {searchResults.length > 0 && (
+                <div className="mt-4 space-y-2">
+                  {searchResults.map((b) => (
+                    <button
+                      key={b.id}
+                      onClick={() => selectBook(b)}
+                      className="w-full flex items-center gap-3 rounded-lg border border-[#1E1E28] p-3 text-left hover:border-[#C5A55A]/50 transition-colors"
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-[#E8E8ED]">{b.title}</p>
+                        <p className="text-xs text-[#6B6B7B]">{b.author} &middot; {b.available_copies} available</p>
+                      </div>
+                      <Badge variant={b.available_copies > 0 ? 'new' : 'damaged'}>
+                        {b.available_copies > 0 ? 'Available' : 'Out'}
+                      </Badge>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {error && (
+              <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>
+            )}
+          </div>
+        )}
+
+        {/* Step 2: Student Details */}
+        {step === 'details' && book && (
+          <div className="space-y-6">
+            <button onClick={() => { setStep('scan'); setBook(null); setError(null); }} className="flex items-center gap-2 text-sm text-[#6B6B7B] hover:text-[#E8E8ED] transition-colors">
+              <ArrowLeft className="h-4 w-4" /> Back to search
+            </button>
+
+            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-5">
+              <div className="flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-[#C5A55A]/10">
+                  <QRCodeSVG value={book.qr_code_value} size={40} fgColor="#C5A55A" bgColor="transparent" />
+                </div>
+                <div className="flex-1">
+                  <h2 className="font-heading text-lg font-semibold text-[#E8E8ED]">{book.title}</h2>
+                  <p className="text-sm text-[#6B6B7B]">{book.author}</p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Badge variant={book.available_copies > 0 ? 'new' : 'damaged'}>
+                      {book.available_copies} of {book.total_copies} available
+                    </Badge>
+                    {book.isbn && <span className="text-xs text-[#4A4A55]">ISBN: {book.isbn}</span>}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-xl border border-[#1E1E28] bg-[#0F0F14] p-6 space-y-4">
+              <h2 className="font-heading text-base font-semibold text-[#E8E8ED]">Student Details</h2>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="student_name">Student Name *</Label>
+                  <Input id="student_name" value={studentName} onChange={(e) => setStudentName(e.target.value)} placeholder="e.g. Jane Muthoni" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="admission">Admission Number *</Label>
+                  <Input id="admission" value={admissionNumber} onChange={(e) => setAdmissionNumber(e.target.value)} placeholder="e.g. 2024/5678" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="class">Class *</Label>
+                  <Input id="class" value={studentClass} onChange={(e) => setStudentClass(e.target.value)} placeholder="e.g. Form 2A" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="loan_days">Loan Period (Days)</Label>
+                  <Input id="loan_days" type="number" value={expectedDays} onChange={(e) => setExpectedDays(e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Expected Return</Label>
+                  <div className="flex h-10 items-center rounded-lg border border-[#2A2A35] bg-[#14141A] px-3 text-sm text-[#E8E8ED]">
+                    {calculateReturnDate()}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {error && (
+              <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">{error}</div>
+            )}
+
+            <Button onClick={handleIssue} disabled={submitting} className="w-full">
+              {submitting ? 'Issuing...' : 'Issue Book'}
+            </Button>
+          </div>
+        )}
+
+        {/* Step 3: Confirmation */}
+        {step === 'confirm' && book && (
+          <div className="text-center space-y-6 py-8">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-500/15">
+              <CheckCircle className="h-8 w-8 text-emerald-400" />
+            </div>
+            <div>
+              <h2 className="font-heading text-xl font-bold text-[#E8E8ED]">Book Issued Successfully</h2>
+              <p className="mt-2 text-sm text-[#6B6B7B]">
+                <span className="font-medium text-[#E8E8ED]">{book.title}</span> issued to{' '}
+                <span className="font-medium text-[#E8E8ED]">{studentName}</span>
+              </p>
+              <p className="text-xs text-[#4A4A55] mt-1">
+                Due back: {calculateReturnDate()}
+              </p>
+            </div>
+            <div className="flex items-center justify-center gap-3">
+              <Button onClick={resetForm}>Issue Another Book</Button>
+              <Link href="/dashboard"><Button variant="ghost">Back to Dashboard</Button></Link>
+            </div>
+          </div>
+        )}
+      </div>
+    </AppShell>
+  );
+}
