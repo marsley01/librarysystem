@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
-const publicRoutes = ['/login', '/auth/callback'];
+const publicRoutes = ['/', '/login', '/auth/callback'];
 
 export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
   // and redirect protected routes to /login (where the user will see an error)
   if (!supabaseUrl || !supabaseKey) {
     const path = request.nextUrl.pathname;
-    if (publicRoutes.some((route) => path.startsWith(route))) {
+    if (publicRoutes.some((route) => path.startsWith(route)) || path === '/') {
       return NextResponse.next({ request });
     }
     return NextResponse.redirect(new URL('/login', request.url));
@@ -43,8 +43,8 @@ export async function middleware(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
-  if (publicRoutes.some((route) => path.startsWith(route))) {
-    if (user && path === '/login') {
+  if (publicRoutes.some((route) => path.startsWith(route)) || path === '/') {
+    if (user && (path === '/login' || path === '/')) {
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
     return supabaseResponse;
