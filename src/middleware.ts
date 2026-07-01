@@ -41,10 +41,27 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // Fetch user role for protected routing
+  const { data: profile } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  const isSystemAdmin = profile?.role === 'system_admin';
+  const hasProfile = !!profile;
+
   const path = request.nextUrl.pathname;
 
   if (publicRoutes.some((route) => path.startsWith(route)) || path === '/') {
     if (user && (path === '/login' || path === '/')) {
+      if (!hasProfile) {
+        // If they have no profile, they shouldn't be redirected to the dashboard (prevents infinite loop)
+        return supabaseResponse;
+      }
+      if (isSystemAdmin) {
+        return NextResponse.redirect(new URL('/system-admin/dashboard', request.url));
+      }
       return NextResponse.redirect(new URL('/dashboard', request.url));
     }
     return supabaseResponse;
@@ -54,14 +71,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // Fetch user role for protected routing
-  const { data: profile } = await supabase
-    .from('users')
-    .select('role')
-    .eq('id', user.id)
-    .single();
-
-  const isSystemAdmin = profile?.role === 'system_admin';
+  // If user is logged in but has no profile, sign them out essentially by redirecting to login with error
+  if (!hasProfile) {
+    return NextResponse.redirect(new URL('/login?error=Profile+setup+incomplete', request.url));
+  }
 
   // System Admins should only access system-admin routes
   if (isSystemAdmin && !path.startsWith('/system-admin')) {

@@ -49,17 +49,12 @@ export default function RegisterPage() {
     }
 
     if (!data.user) {
-      setError('Something went wrong. Please try again.');
+      setError('An unexpected error occurred during signup.');
       setLoading(false);
       return;
     }
 
-    if (!data.session) {
-      setSuccess(true);
-      setLoading(false);
-      return;
-    }
-
+    // Call our new RPC to register the institution
     const { error: insertError } = await supabase.rpc('register_institution', {
       p_school_name: institutionName,
       p_full_name: fullName,
@@ -68,7 +63,14 @@ export default function RegisterPage() {
     });
 
     if (insertError) {
-      setError('Account created but profile setup failed. Contact admin.');
+      console.error('RPC Error:', insertError);
+      setError('Failed to setup institution: ' + insertError.message);
+      setLoading(false);
+      return;
+    }
+
+    if (!data.session) {
+      setSuccess(true);
       setLoading(false);
       return;
     }
