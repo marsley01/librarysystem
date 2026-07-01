@@ -1,12 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Library } from 'lucide-react';
+import { Library, AlertTriangle } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
 
 export default function LoginPage() {
@@ -14,12 +14,24 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [supabaseMissing, setSupabaseMissing] = useState(false);
   const router = useRouter();
-  const supabase = createClient();
+
+  useEffect(() => {
+    const supabase = createClient();
+    setSupabaseMissing(!supabase);
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    const supabase = createClient();
+    if (!supabase) {
+      setError('Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables.');
+      return;
+    }
+
     setLoading(true);
 
     const { error: authError } = await supabase.auth.signInWithPassword({
@@ -51,6 +63,21 @@ export default function LoginPage() {
             Library Management System
           </p>
         </div>
+
+        {supabaseMissing && (
+          <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <p className="text-sm font-medium text-amber-400">Supabase Not Configured</p>
+                <p className="text-xs text-amber-400/70 mt-1">
+                  Add <code className="text-amber-300">NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
+                  <code className="text-amber-300">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to your Vercel project's environment variables.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
