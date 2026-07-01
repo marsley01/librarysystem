@@ -14,6 +14,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [institutionName, setInstitutionName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -59,12 +60,11 @@ export default function RegisterPage() {
       return;
     }
 
-    const { error: insertError } = await supabase.from('users').insert({
-      id: data.user.id,
-      school_id: '00000000-0000-0000-0000-000000000001',
-      role: 'librarian',
-      full_name: fullName,
-      email,
+    const { error: insertError } = await supabase.rpc('register_institution', {
+      p_school_name: institutionName,
+      p_full_name: fullName,
+      p_email: email,
+      p_user_id: data.user.id
     });
 
     if (insertError) {
@@ -113,6 +113,18 @@ export default function RegisterPage() {
         </div>
 
         <form onSubmit={handleRegister} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="institutionName">Institution Name</Label>
+            <Input
+              id="institutionName"
+              type="text"
+              placeholder="Nairobi Premier School"
+              value={institutionName}
+              onChange={(e) => setInstitutionName(e.target.value)}
+              required
+            />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="fullName">Full Name</Label>
             <Input

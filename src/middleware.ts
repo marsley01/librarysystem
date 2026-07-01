@@ -54,16 +54,28 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  if (path.startsWith('/admin')) {
-    const { data: profile } = await supabase
-      .from('users')
-      .select('role')
-      .eq('id', user.id)
-      .single();
+  // Fetch user role for protected routing
+  const { data: profile } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .single();
 
-    if (profile?.role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
+  const isSystemAdmin = profile?.role === 'system_admin';
+
+  // System Admins should only access system-admin routes
+  if (isSystemAdmin && !path.startsWith('/system-admin')) {
+    return NextResponse.redirect(new URL('/system-admin/dashboard', request.url));
+  }
+
+  // Non-system admins cannot access system-admin routes
+  if (path.startsWith('/system-admin') && !isSystemAdmin) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  // Only school admins can access /admin routes
+  if (path.startsWith('/admin') && profile?.role !== 'admin') {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   return supabaseResponse;

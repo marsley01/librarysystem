@@ -35,7 +35,7 @@ export default function LoginPage() {
 
     setLoading(true);
 
-    const { error: authError } = await supabase.auth.signInWithPassword({
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -46,7 +46,22 @@ export default function LoginPage() {
       return;
     }
 
-    router.push('/dashboard');
+    if (authData.user) {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', authData.user.id)
+        .single();
+
+      if (profile?.role === 'system_admin') {
+        router.push('/system-admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+    } else {
+      router.push('/dashboard');
+    }
+    
     router.refresh();
   };
 
