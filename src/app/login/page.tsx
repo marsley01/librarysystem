@@ -1,26 +1,29 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Library, AlertTriangle } from 'lucide-react';
+import { Library } from 'lucide-react';
 import { APP_NAME } from '@/lib/constants';
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [supabaseMissing, setSupabaseMissing] = useState(false);
+  const [serviceDown, setServiceDown] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const sessionExpired = searchParams.get('reason') === 'inactivity';
 
   useEffect(() => {
     const supabase = createClient();
-    setSupabaseMissing(!supabase);
+    setServiceDown(!supabase);
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -29,7 +32,7 @@ export default function LoginPage() {
 
     const supabase = createClient();
     if (!supabase) {
-      setError('Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables.');
+      setServiceDown(true);
       return;
     }
 
@@ -61,7 +64,7 @@ export default function LoginPage() {
     } else {
       router.push('/dashboard');
     }
-    
+
     router.refresh();
   };
 
@@ -80,18 +83,19 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {supabaseMissing && (
+        {sessionExpired && (
+          <div className="mb-4 rounded-lg border border-blue-500/30 bg-blue-500/10 px-4 py-3">
+            <p className="text-sm text-blue-400">
+              Session expired due to inactivity. Please sign in again.
+            </p>
+          </div>
+        )}
+
+        {serviceDown && (
           <div className="mb-4 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3">
-            <div className="flex items-start gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-400 shrink-0 mt-0.5" />
-              <div>
-                <p className="text-sm font-medium text-amber-400">Supabase Not Configured</p>
-                <p className="text-xs text-amber-400/70 mt-1">
-                  Add <code className="text-amber-300">NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
-                  <code className="text-amber-300">NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to your Vercel project's environment variables.
-                </p>
-              </div>
-            </div>
+            <p className="text-sm text-amber-400">
+              Service temporarily unavailable. Please try again shortly.
+            </p>
           </div>
         )}
 
@@ -143,5 +147,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }

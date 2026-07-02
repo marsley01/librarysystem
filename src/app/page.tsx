@@ -383,14 +383,14 @@ function BuiltForKenya() {
             designed around the Kenyan school calendar, curriculum structure, and procurement cycle.
           </p>
           <p>
-            This system works with intermittent connectivity (core functions cache locally), uses no
-            special hardware beyond phones many schools already have, and prices itself for institutional
-            budgets — per term or per year, not per-seat per-month SaaS models that don't match how
-            schools plan their finances.
+            The system uses no special hardware beyond phones many schools already have, and prices
+            itself for institutional budgets — per term or per year, not per-seat per-month SaaS
+            models that don't match how schools plan their finances.
           </p>
           <p>
             Borrow records, student data, and book history stay within your school's Supabase
-            database. Data export is available at any time. There is no vendor lock-in.
+            database. CSV and JSON export of all your data is available from the admin dashboard at
+            any time. There is no vendor lock-in.
           </p>
         </div>
       </div>

@@ -13,6 +13,7 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
   const scannerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const scannedRef = useRef(false);
+  const retryCountRef = useRef(0);
 
   useEffect(() => {
     let mounted = true;
@@ -22,6 +23,11 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
         const { Html5Qrcode } = await import('html5-qrcode');
 
         if (!mounted || !containerRef.current) return;
+
+        if (scannerRef.current) {
+          try { await scannerRef.current.stop(); } catch {}
+          scannerRef.current = null;
+        }
 
         const scanner = new Html5Qrcode('qr-scanner');
         scannerRef.current = scanner;
@@ -39,11 +45,13 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
               scanner.stop().catch(() => {});
             }
           },
-          () => {} // ignore non-qr frames
+          () => {}
         );
 
-        setScanning(true);
-        setError(null);
+        if (mounted) {
+          setScanning(true);
+          setError(null);
+        }
       } catch (err: any) {
         if (!mounted) return;
         const msg = err?.message || 'Camera access failed';
@@ -52,12 +60,14 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
       }
     }
 
-    startScanning();
+    const timer = setTimeout(startScanning, 300);
 
     return () => {
       mounted = false;
+      clearTimeout(timer);
       if (scannerRef.current) {
         scannerRef.current.stop().catch(() => {});
+        scannerRef.current = null;
       }
     };
   }, [onScan, onError]);
@@ -66,13 +76,7 @@ export function QrScanner({ onScan, onError }: QrScannerProps) {
     scannedRef.current = false;
     setError(null);
     setScanning(false);
-    if (scannerRef.current) {
-      scannerRef.current.stop().catch(() => {}).then(() => {
-        window.location.reload();
-      });
-    } else {
-      window.location.reload();
-    }
+    window.location.reload();
   };
 
   return (

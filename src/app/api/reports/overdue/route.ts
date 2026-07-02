@@ -1,33 +1,37 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createRouteHandler } from '@/lib/api-utils';
+import { AuthError, NotFoundError } from '@/lib/errors';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export const GET = createRouteHandler(async () => {
   const supabase = await createServerSupabaseClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (authError || !user) {
+    throw new AuthError();
   }
 
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('users')
     .select('*')
     .eq('id', user.id)
     .single();
 
-  if (!profile) {
-    return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+  if (profileError || !profile) {
+    throw new NotFoundError('Profile not found');
   }
 
-  const { data: records } = await supabase
+  const { data: records, error: recordsError } = await supabase
     .from('borrow_records')
     .select('*, book:books(title)')
     .eq('school_id', profile.school_id)
     .in('status', ['borrowed', 'overdue'])
     .lt('expected_return_date', new Date().toISOString().split('T')[0])
     .order('expected_return_date', { ascending: true });
+
+  if (recordsError) {
+    throw new Error('Failed to fetch overdue records');
+  }
 
   let csv = 'Student,Admission,Class,Book,Expected Return,Days Overdue,Fine\n';
 
@@ -47,4 +51,4 @@ export async function GET() {
       'Content-Disposition': 'attachment; filename="overdue-report.csv"',
     },
   });
-}
+}, { rateLimit: 'default' });

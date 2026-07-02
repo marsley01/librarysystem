@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { APP_NAME } from '@/lib/constants';
+import { Providers } from '@/components/providers';
 
 export const metadata: Metadata = {
   title: {
@@ -32,7 +33,7 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased min-h-screen bg-background">
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

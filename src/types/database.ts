@@ -1,4 +1,4 @@
-export type Role = 'librarian' | 'admin';
+export type Role = 'librarian' | 'admin' | 'system_admin';
 
 export type BookCondition = 'new' | 'good' | 'fair' | 'poor' | 'damaged';
 export type BorrowStatus = 'borrowed' | 'returned' | 'overdue';
