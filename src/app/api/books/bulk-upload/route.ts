@@ -41,7 +41,26 @@ export const POST = createRouteHandler(async (request: Request) => {
     throw new ValidationError('CSV file must have a header row and at least one data row');
   }
 
-  const headers = lines[0].split(',').map((h) => h.trim().toLowerCase().replace(/\s+/g, '_'));
+  function parseCsvLine(line: string): string[] {
+    const result: string[] = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  }
+
+  const headers = parseCsvLine(lines[0]).map((h) => h.toLowerCase().replace(/\s+/g, '_'));
   const requiredFields = ['title', 'author'];
   const missingHeaders = requiredFields.filter((f) => !headers.includes(f));
   if (missingHeaders.length > 0) {
@@ -52,12 +71,14 @@ export const POST = createRouteHandler(async (request: Request) => {
   let success = 0;
   const BATCH_SIZE = 100;
 
+  let qrCounter = 0;
+
   for (let i = 1; i < lines.length; i += BATCH_SIZE) {
     const batch = lines.slice(i, i + BATCH_SIZE);
     const booksToInsert: any[] = [];
 
     for (const line of batch) {
-      const values = line.split(',').map((v) => v.trim());
+      const values = parseCsvLine(line);
       const row: Record<string, string> = {};
       headers.forEach((h, idx) => { row[h] = values[idx] || ''; });
 
@@ -67,6 +88,7 @@ export const POST = createRouteHandler(async (request: Request) => {
       }
 
       const totalCopies = parseInt(row.total_copies, 10) || 1;
+      const uniqueSuffix = `${Date.now().toString(36).toUpperCase()}-${(++qrCounter).toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
       booksToInsert.push({
         school_id: profile.school_id,
         title: row.title,
@@ -85,7 +107,7 @@ export const POST = createRouteHandler(async (request: Request) => {
         supplier: row.supplier || null,
         acquisition_date: row.acquisition_date || null,
         purchase_cost: row.purchase_cost ? parseFloat(row.purchase_cost) : null,
-        qr_code_value: `KLS-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+        qr_code_value: `KLS-${uniqueSuffix}`,
       });
     }
 

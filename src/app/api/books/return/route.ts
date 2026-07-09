@@ -64,10 +64,9 @@ export const POST = createRouteHandler(async (request: Request) => {
   if (updateError) throw new Error('Failed to update borrow record');
 
   if (record.book) {
-    const { error: bookError } = await supabase
-      .from('books')
-      .update({ available_copies: (record.book as any).available_copies + 1 })
-      .eq('id', record.book_id);
+    const { error: bookError } = await supabase.rpc('increment_available_copies', {
+      p_book_id: record.book_id,
+    });
 
     if (bookError) {
       console.error('Failed to increment available copies after return:', bookError);

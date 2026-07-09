@@ -52,7 +52,6 @@ export const POST = createRouteHandler(async (request: Request) => {
     .single();
 
   if (bookError || !book) throw new NotFoundError('Book not found');
-  if (book.available_copies <= 0) throw new ValidationError('No available copies to borrow');
 
   const key = idempotency_key || generateIdempotencyKey();
 
@@ -85,14 +84,17 @@ export const POST = createRouteHandler(async (request: Request) => {
 
   if (insertError) throw new Error('Failed to create borrow record');
 
-  const { error: updateError } = await supabase
+  const { data: updatedBook, error: updateError } = await supabase
     .from('books')
     .update({ available_copies: book.available_copies - 1 })
-    .eq('id', book.id);
+    .eq('id', book.id)
+    .gt('available_copies', 0)
+    .select()
+    .single();
 
-  if (updateError) {
+  if (updateError || !updatedBook) {
     await supabase.from('borrow_records').delete().eq('id', newRecord.id);
-    throw new Error('Failed to update book inventory. Transaction rolled back.');
+    throw new Error('No available copies to borrow. Transaction rolled back.');
   }
 
   return jsonResponse({

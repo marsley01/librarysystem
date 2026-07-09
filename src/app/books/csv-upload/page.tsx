@@ -43,14 +43,33 @@ export default function CsvUploadPage() {
 
     setFile(f);
 
+    function parseCsvLine(line: string): string[] {
+      const result: string[] = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          result.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      result.push(current.trim());
+      return result;
+    }
+
     const chunk = f.slice(0, 50 * 1024);
     const text = await chunk.text();
     const lines = text.split('\n').filter((l) => l.trim());
 
     if (lines.length > 0) {
-      setPreviewHeaders(lines[0].split(',').map((h) => h.trim()));
+      setPreviewHeaders(parseCsvLine(lines[0]).map((h) => h.trim()));
       setPreviewRows(
-        lines.slice(1, 6).map((l) => l.split(',').map((v) => v.trim()))
+        lines.slice(1, 6).map((l) => parseCsvLine(l).map((v) => v.trim()))
       );
     }
   };

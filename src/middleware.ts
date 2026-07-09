@@ -4,12 +4,10 @@ import { createServerClient } from '@supabase/ssr';
 
 const publicRoutes = ['/', '/login', '/register', '/auth/callback'];
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // If Supabase env vars aren't set, let public routes through
-  // and redirect protected routes to /login (where the user will see an error)
   if (!supabaseUrl || !supabaseKey) {
     const path = request.nextUrl.pathname;
     if (publicRoutes.some((route) => path.startsWith(route)) || path === '/') {
@@ -41,7 +39,6 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Fetch user role for protected routing only if user exists
   let profile = null;
   if (user) {
     const { data } = await supabase
@@ -60,7 +57,6 @@ export async function proxy(request: NextRequest) {
   if (publicRoutes.some((route) => path.startsWith(route)) || path === '/') {
     if (user && (path === '/login' || path === '/')) {
       if (!hasProfile) {
-        // If they have no profile, they shouldn't be redirected to the dashboard (prevents infinite loop)
         return supabaseResponse;
       }
       if (isSystemAdmin) {
@@ -75,22 +71,18 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/login', request.url));
   }
 
-  // If user is logged in but has no profile, sign them out essentially by redirecting to login with error
   if (!hasProfile) {
     return NextResponse.redirect(new URL('/login?error=Profile+setup+incomplete', request.url));
   }
 
-  // System Admins should only access system-admin routes
   if (isSystemAdmin && !path.startsWith('/system-admin')) {
     return NextResponse.redirect(new URL('/system-admin/dashboard', request.url));
   }
 
-  // Non-system admins cannot access system-admin routes
   if (path.startsWith('/system-admin') && !isSystemAdmin) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  // Only school admins can access /admin routes
   if (path.startsWith('/admin') && profile?.role !== 'admin') {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
